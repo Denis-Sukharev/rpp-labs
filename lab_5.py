@@ -17,7 +17,7 @@ def create_users_table():
 
 
 # функция для добавления нового пользователя в таблицу "users"
-def add_user(name, email):
+def add_user(id, name, email):
     # Установка соединения с базой данных
     conn = sqlite3.connect('database.db')
     
@@ -25,7 +25,7 @@ def add_user(name, email):
     cursor = conn.cursor()
     
     # Добавление пользователя в таблицу "users"
-    cursor.execute("INSERT INTO users (name, email) VALUES (?, ?)", (name, email))
+    cursor.execute("INSERT INTO users (id, name, email) VALUES (?, ?, ?)", (id, name, email))
     
     # Сохранение изменений и закрытие соединения
     conn.commit()
@@ -81,22 +81,32 @@ def delete_user_by_id(user_id):
     conn.close()
     
 
-# Создание таблицы "users"
-# create_users_table()
+import random
 
-# добавление нового пользователя
-user_id = add_user("Иван", "ivan@example.com")
-print(f"Добавлен пользователь с id {user_id}")
+def main():
+    # Создание таблицы "users"
+    # create_users_table()
 
-# получение всех пользователей из таблицы
-all_users = get_all_users()
-for user in all_users:
-    print(user)
+    # Добавление нового пользователя
+    id = random.randint(1, 1000) 
+    name = "John Doe"
+    email = "johndoe@example.com"
+    add_user(id, name, email) 
 
-# получение пользователя по id
-user = get_user_by_id(user_id)
-print(f"Пользователь {user}")
+    # Получение всех пользователей
+    print("All users:")
+    all_users = get_all_users()
+    for user in all_users:
+        print(user)
 
-# удалить пользователя по id
-delete_user_by_id(6)
+    # Получение пользователя по id
+    user_id = id
+    user = get_user_by_id(user_id)
+    print(f"Добавлен пользователь с id {user_id}: {name, email}")
 
+    # Удаление пользователя по id
+    delete_user_by_id(user_id)
+    print(f"Пользователь с id {user_id} удален")
+
+if __name__ == "__main__":
+    main()
